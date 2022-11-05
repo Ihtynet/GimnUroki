@@ -12,13 +12,18 @@ async def command_start(message: types.Message):
     user_dates = bs.check_users(message.from_user.id)
     if len(user_dates) == 0:
         await bot.send_message(message.from_user.id, "Здравствуйте, {message.from_user}! Введите пароль класса:")
-"""    #await bot.send_message(message.from_user.id,"Привет!".format(message.from_user),reply_markup=nav.mainMenu)
-    await bot.send_message(message.from_user.id, "Привет!".format(message.from_user))"""
+
+
 
 @dp.message_handler()
 async def bot_message(message: types.Message):
-    if
-    datacheck = bs.check_psw_klass(message.text)
+    mes = message.text
+    if mes[:3] == "ps#":
+        datacheck = bs.check_psw_klass(mes[3:])
+        if len(datacheck) == 1:
+            bs.registr_uses(message.from_user.id, datacheck[0][1], message.from_user.name, message.from_user.name)
+            #await bot.send_message(message.from_user.id, "Укажите ФАМИЛИЯ ИМЯ ученика: ")
+
 
 """    if message.text == "123":
         await bot.send_message(message.from_user.id,message.from_user)

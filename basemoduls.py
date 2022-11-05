@@ -1,4 +1,6 @@
 import sqlite3
+from datetime import datetime
+
 ###########################
 # Проверка пользователя
 def check_users(user_id):
@@ -46,5 +48,30 @@ def check_psw_klass(psw):
             dbcon.close()
     return res
 
-print(check_psw_klass("1234"))
-print(check_users("1234567891"))
+#########################
+# Регистрация пользователя
+def registr_uses(user_id,klass,name,student):
+    res = []
+    try:
+        dbcon = sqlite3.connect('gimnuroki_data.db')
+        con_cursor = dbcon.cursor()
+        now = datetime.now()
+        text_q = """INSERT INTO users
+                              (idtelegramm, name, student, klass, joining_date)
+                              VALUES (?, ?, ?, ?, ?);"""
+        data_set = (user_id, name, student, klass, now)
+        con_cursor.execute(text_q, data_set)
+        dbcon.commit()
+
+        con_cursor.close()
+
+    except sqlite3.Error as error:
+        print("Ошибка при подключении к sqlite", error)
+    finally:
+        if (dbcon):
+            dbcon.close()
+    return res
+
+
+#print(check_psw_klass("1234"))
+#print(check_users("1234567891"))
