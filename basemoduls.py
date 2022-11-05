@@ -24,19 +24,18 @@ def check_users(user_id):
 
 ########################################
 ## проверка пароля
-def check_psw_klass(psw,klass):
+def check_psw_klass(psw):
+    res = []
     try:
         dbcon = sqlite3.connect('gimnuroki_data.db')
         con_cursor = dbcon.cursor()
 
         text_q = "select password, klass from psw_klass where password=? and klass=?"
-        data_set = (psw,klass)
+        data_set = (psw,)
         con_cursor.execute(text_q,data_set)
-        records = con_cursor.fetchone()
-        if records == None:
-            return False
-        else:
-            return True
+        records = con_cursor.fetchall()
+        for row in records:
+            res.append([row[0], row[1]])
 
         con_cursor.close()
 
@@ -45,7 +44,7 @@ def check_psw_klass(psw,klass):
     finally:
         if (dbcon):
             dbcon.close()
-    return False
+    return res
 
-print(check_psw_klass("1234","5"))
-print(check_users("12345678910"))
+print(check_psw_klass("1234"))
+print(check_users("1234567891"))
