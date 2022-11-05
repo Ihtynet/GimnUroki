@@ -1,19 +1,64 @@
 import sqlite3
+from datetime import datetime
+
+now = datetime.now()
+
 
 try:
-    sqlite_connection = sqlite3.connect('gimnuroki_data.db')
-    cursor = sqlite_connection.cursor()
-    print("База данных создана и успешно подключена к SQLite")
+    dbcon = sqlite3.connect('gimnuroki_data.db')
+    con_cursor = dbcon.cursor()
 
-    sqlite_select_query = "select sqlite_version();"
-    cursor.execute(sqlite_select_query)
-    record = cursor.fetchall()
+    text_q = "select sqlite_version();"
+    con_cursor.execute(text_q)
+    record = con_cursor.fetchall()
     print("Версия базы данных SQLite: ", record)
-    cursor.close()
+
+
+    ########################
+    # Таблица пользователей канала
+    text_q = """CREATE TABLE users ( 
+             id INTEGER PRIMARY KEY,
+             idtelegramm TEXT NOT NULL,  
+             name TEXT NOT NULL,  
+             student text NOT NULL,  
+             joining_date timestamp,  
+             klass INTEGER NOT NULL, 
+             );"""
+    con_cursor.execute(text_q)
+    dbcon.commit()
+
+
+    ########################
+    # Таблица паролей по классам
+    text_q = """CREATE TABLE psw_klass ( 
+             id INTEGER PRIMARY KEY,  
+             password TEXT NOT NULL,  
+             klass INTEGER NOT NULL 
+             );"""
+    con_cursor.execute(text_q)
+    dbcon.commit()
+
+    ##############################
+    # Данные паролей
+    text_q = """INSERT INTO psw_klass
+                          (password, klass)
+                          VALUES ('1234', '5');"""
+    con_cursor.execute(text_q)
+    dbcon.commit()
+
+    ##############################
+    # Данные пользователей
+    data_set = (12345678910, 'Alex', 'Иванов Иван', 1, now)
+    text_q = """INSERT INTO users
+                          (idtelegramm, name, student, klass, joining_date)
+                          VALUES (?, ?, ?, ?, ?);"""
+    con_cursor.execute(text_q,data_set)
+    dbcon.commit()
+
+    con_cursor.close()
 
 except sqlite3.Error as error:
     print("Ошибка при подключении к sqlite", error)
 finally:
-    if (sqlite_connection):
-        sqlite_connection.close()
-        print("Соединение с SQLite закрыто")
+    if (dbcon):
+        dbcon.close()
