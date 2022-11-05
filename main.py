@@ -8,6 +8,7 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start'])
 async def command_start(message: types.Message):
+
     #await bot.send_message(message.from_user.id,"Привет!".format(message.from_user),reply_markup=nav.mainMenu)
     await bot.send_message(message.from_user.id, "Привет!".format(message.from_user))
 @dp.message_handler()
