@@ -1,16 +1,21 @@
-# This is a sample Python script.
+import os
+from aiogram import Bot,Dispatcher,executor,types
+from config import bot_token, admin
+import markup as nav
+bot = Bot(token=bot_token)
+dp = Dispatcher(bot)
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+@dp.message_handler(commands=['start'])
+async def command_start(message: types.Message):
+    await bot.send_message(message.from_user.id,"Привет!".format(message.from_user),reply_markup=nav.mainMenu)
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+@dp.message_handler()
+async def bot_message(message: types.Message):
+    if message.text == "+":
+        await bot.send_message(message.from_user.id,v,reply_markup=nav.mainMenu)
+    if message.text == "-":
+        await bot.send_message(message.from_user.id,v,reply_markup=nav.mainMenu)
+    if message.text=="1":
+        pass
+if __name__ == "__main__":
+    executor.start_polling(dp,skip_updates= True)
