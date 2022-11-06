@@ -6,7 +6,9 @@ import basemoduls as bs
 bot = Bot(token=bot_token)
 dp = Dispatcher(bot)
 
-tek_commands = {}
+tek_commands    = {}
+tek_urok        = {}
+tek_klass       = {}
 
 @dp.message_handler(commands=['start'])
 async def command_start(message: types.Message):
@@ -15,29 +17,25 @@ async def command_start(message: types.Message):
     tx_user     = message.from_user.last_name + " " + message.from_user.first_name
     id_user     = message.from_user.id
     user_dates  = bs.check_users(id_user)
-
+    tek_urok[id_user] = ""
+    tek_klass[id_user] = ""
     if len(user_dates) == 0:
         tek_commands[id_user] = "start"
         await bot.send_message(id_user, "Здравствуйте, " + tx_user+". Введите пароль класса: ")
     else:
-        tek_commands[id_user] = ""
-        await bot.send_message(id_user, "Здравствуйте, " + tx_user+". Ваш класс: "+str(user_dates[0][0])+"\n Нажмите (<Меню>) для выборка действий")
+        tek_commands[id_user]   = ""
+        tek_klass[id_user]      = user_dates[0][0]
+        await bot.send_message(id_user, "Здравствуйте, " + tx_user+". Ваш класс: "+str(tek_klass[id_user])+"\n Нажмите (<Меню>) для выборка действий")
 
-"""        buttons = [
-            types.InlineKeyboardButton(text="Выбрать ", callback_data="choice_urok"),
-            types.InlineKeyboardButton(text="Выбрать видео", callback_data="film"),
-            types.KeyboardButton('Сменить класс')
-        ]
-        keyboard = types.InlineKeyboardMarkup(row_width=1)
-        keyboard.add(buttons)
-        await bot.send_message(message.from_user.id, "Здравствуйте, " + tx_user, reply_markup=keyboard)
-"""
+
 @dp.message_handler(commands=['klass'])
 async def command_klass(message: types.Message):
     global tek_commands
     tx_user = message.from_user.last_name + " " + message.from_user.first_name
     id_user = message.from_user.id
     tek_commands[id_user] = "klass"
+    tek_urok[id_user] = ""
+    tek_klass[id_user] = ""
     await bot.send_message(id_user, tx_user+". Введите пароль класса: ")
 
 
@@ -64,15 +62,16 @@ async def bot_message(message: types.Message):
             if len(user_dates) == 0:
                 await bot.send_message(id_user, "Ошибка регистрации. Введите пароль класса: ")
             else:
-                await bot.send_message(id_user, tx_user + ". Ваш класс: " + str(user_dates[0][0]) + "\n Нажмите (<Меню>) для выборка действий")
-                tek_commands[id_user] = ""
+                tek_klass[id_user] = user_dates[0][0]
+                await bot.send_message(id_user, tx_user + ". Ваш класс: " + str(tek_klass[id_user]) + "\n Нажмите (<Меню>) для выборка действий")
+                tek_commands[id_user]   = ""
+                tek_klass[id_user]      = ""
+
         else:
             await bot.send_message(id_user, "Не правильный пароль класса")
 
 
-"""@dp.callback_query_handler(text="choice_urok")
-async def send_random_value(call: types.CallbackQuery):
-    await call.message.answer("123123123")"""
+
 
 
 if __name__ == "__main__":

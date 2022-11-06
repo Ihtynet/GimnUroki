@@ -27,6 +27,15 @@ try:
     con_cursor.execute(text_q)
     dbcon.commit()
 
+    ########################
+    # Таблица уроки по классам
+    text_q = """CREATE TABLE urokiklassa ( 
+             id INTEGER PRIMARY KEY,
+             urok TEXT NOT NULL,  
+             klass INTEGER NOT NULL 
+             );"""
+    con_cursor.execute(text_q)
+    dbcon.commit()
 
     ########################
     # Таблица паролей по классам
@@ -54,6 +63,24 @@ try:
                           VALUES (?, ?, ?, ?, ?);"""
     con_cursor.execute(text_q,data_set)
     dbcon.commit()
+
+    ##############################
+    # Данные уроки по классам
+    mass_set = [
+        ('Математика', 5),
+        ('Русский язык', 5),
+        ('Литература', 5),
+        ('Математика', 6),
+        ('Русский язык', 6),
+        ('Литература', 6)
+                ]
+    text_q = """INSERT INTO urokiklassa
+                          (urok, klass)
+                          VALUES (?, ?);"""
+
+    for data_set in mass_set:
+        con_cursor.execute(text_q,data_set)
+        dbcon.commit()
 
     con_cursor.close()
 
