@@ -1,5 +1,6 @@
 import os
 from aiogram import Bot,Dispatcher,executor,types
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from config import bot_token
 import basemoduls as bs
 
@@ -9,10 +10,13 @@ dp = Dispatcher(bot)
 tek_commands    = {}
 tek_urok        = {}
 tek_klass       = {}
+tek_urokiklassa = {}
 
 @dp.message_handler(commands=['start'])
 async def command_start(message: types.Message):
     global tek_commands
+    global tek_klass
+    global tek_urokiklassa
 
     tx_user     = message.from_user.last_name + " " + message.from_user.first_name
     id_user     = message.from_user.id
@@ -25,45 +29,48 @@ async def command_start(message: types.Message):
     else:
         tek_commands[id_user]   = ""
         tek_klass[id_user]      = user_dates[0][0]
-        await bot.send_message(id_user, "Здравствуйте, " + tx_user+". Ваш класс: "+str(tek_klass[id_user])+"\n Нажмите (<Меню>) для выборка действий")
+        tek_urokiklassa[id_user] = bs.get_urokiklassa(tek_klass[id_user])
+        await bot.send_message(id_user, "Здравствуйте, " + tx_user+". Ваш класс: "+str(tek_klass[id_user])+"\n Нажмите (Меню) для выбора действий")
 
 
 @dp.message_handler(commands=['klass'])
 async def command_klass(message: types.Message):
     global tek_commands
+    global tek_urok
+    global tek_klass
+    global tek_urokiklassa
     tx_user = message.from_user.last_name + " " + message.from_user.first_name
     id_user = message.from_user.id
     tek_commands[id_user] = "klass"
     tek_urok[id_user] = ""
     tek_klass[id_user] = ""
+    tek_urokiklassa[id_user] = []
     await bot.send_message(id_user, ">>Введите пароль класса: ")
 
 
 @dp.message_handler(commands=['urok'])
 async def command_klass(message: types.Message):
     global tek_commands
+    global tek_urok
+    global tek_klass
+    global tek_urokiklassa
     tx_user = message.from_user.last_name + " " + message.from_user.first_name
     id_user = message.from_user.id
     tek_commands[id_user] = "urok"
     tek_urok[id_user] = ""
-    tek_klass[id_user] = ""
-    ## нАДО СОЗДАТЬ СПИСОК КНОПОК С ПРЕДМЕТАМИ КЛАССА
-    await bot.send_message(id_user, ">>Выберите предмет: ")
+    tek_mark = ReplyKeyboardMarkup(resize_keyboard=True);
+    for ur in tek_urokiklassa[id_user]:
+        tekbutton = KeyboardButton(ur)
+        tek_mark = tek_mark.add(tekbutton)
 
-@dp.message_handler(commands=['movies'])
-async def command_klass(message: types.Message):
-    global tek_commands
-    tx_user = message.from_user.last_name + " " + message.from_user.first_name
-    id_user = message.from_user.id
-    tek_commands[id_user] = "urok"
-    tek_urok[id_user] = ""
-    tek_klass[id_user] = ""
-    ## нАДО СОЗДАТЬ СПИСОК КНОПОК С видео КЛАССА
-    await bot.send_message(id_user, ">>Выберите видео запись: ")
+    ## нАДО СОЗДАТЬ СПИСОК КНОПОК С ПРЕДМЕТАМИ КЛАССА
+    await bot.send_message(id_user, ">>Выберите предмет: ", reply_markup=tek_mark)
 
 @dp.message_handler()
 async def bot_message(message: types.Message):
     global tek_commands
+    global tek_klass
+    global tek_urokiklassa
     #await bot.send_message(message.from_user.id, message.text)
     tx_user     = message.from_user.last_name + " " + message.from_user.first_name
     id_user      = message.from_user.id
@@ -84,14 +91,24 @@ async def bot_message(message: types.Message):
                 await bot.send_message(id_user, "Ошибка регистрации. Введите пароль класса: ")
             else:
                 tek_klass[id_user] = user_dates[0][0]
-                await bot.send_message(id_user, tx_user + ". Ваш класс: " + str(tek_klass[id_user]) + "\n Нажмите (<Меню>) для выборка действий")
+                await bot.send_message(id_user, tx_user + ". Ваш класс: " + str(tek_klass[id_user]) + "\n Нажмите (Меню) для выбора действий")
                 tek_commands[id_user]   = ""
                 tek_klass[id_user]      = ""
-
+                tek_urokiklassa[id_user] = bs.get_urokiklassa(tek_klass[id_user])
         else:
             await bot.send_message(id_user, "Не правильный пароль класса")
+    elif  tek_commands[id_user] == "urok":
+        tek_commands[id_user] = ""
+        tek_urok[id_user] = mes
 
+        list_movies = bs.get_moviesuroka("math", tek_klass[id_user])
+        tek_mark = ReplyKeyboardMarkup(resize_keyboard=True);
+        for mv in list_movies:
+            tekbutton = KeyboardButton(mv)
+            tek_mark = tek_mark.add(tekbutton)
 
+        await bot.send_message(id_user, "Выберите видеозапись по предмету : "+tek_urok[id_user], reply_markup=tek_mark)
+        tek_commands[id_user] = "movies"
 
 
 
