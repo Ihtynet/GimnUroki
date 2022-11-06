@@ -32,7 +32,7 @@ def check_psw_klass(psw):
         dbcon = sqlite3.connect('gimnuroki_data.db')
         con_cursor = dbcon.cursor()
 
-        text_q = "select password, klass from psw_klass where password=? and klass=?"
+        text_q = "select password, klass from psw_klass where password=?"
         data_set = (psw,)
         con_cursor.execute(text_q,data_set)
         records = con_cursor.fetchall()
@@ -72,6 +72,7 @@ def registr_uses(user_id,klass,name,student):
             dbcon.close()
     return res
 
+#registr_uses(123321, 5, "tx_user", "tx_username")
 
 #print(check_psw_klass("1234"))
 #print(check_users("1234567891"))

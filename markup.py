@@ -1,7 +1,7 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-# Меню авторизации
+# стартовое Меню
 # Кнопки изменения громкости
-btnP = KeyboardButton('+')
+btnP = KeyboardButton('Выбрать ')
 btnM = KeyboardButton("-")
 # Пауза
 btnPause = KeyboardButton("Пауза")
