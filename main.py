@@ -1,6 +1,6 @@
 import os
 from aiogram import Bot,Dispatcher,executor,types
-from config import bot_token, admin
+from config import bot_token
 import basemoduls as bs
 
 bot = Bot(token=bot_token)
