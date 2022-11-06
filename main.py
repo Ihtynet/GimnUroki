@@ -36,9 +36,30 @@ async def command_klass(message: types.Message):
     tek_commands[id_user] = "klass"
     tek_urok[id_user] = ""
     tek_klass[id_user] = ""
-    await bot.send_message(id_user, tx_user+". Введите пароль класса: ")
+    await bot.send_message(id_user, ">>Введите пароль класса: ")
 
 
+@dp.message_handler(commands=['urok'])
+async def command_klass(message: types.Message):
+    global tek_commands
+    tx_user = message.from_user.last_name + " " + message.from_user.first_name
+    id_user = message.from_user.id
+    tek_commands[id_user] = "urok"
+    tek_urok[id_user] = ""
+    tek_klass[id_user] = ""
+    ## нАДО СОЗДАТЬ СПИСОК КНОПОК С ПРЕДМЕТАМИ КЛАССА
+    await bot.send_message(id_user, ">>Выберите предмет: ")
+
+@dp.message_handler(commands=['movies'])
+async def command_klass(message: types.Message):
+    global tek_commands
+    tx_user = message.from_user.last_name + " " + message.from_user.first_name
+    id_user = message.from_user.id
+    tek_commands[id_user] = "urok"
+    tek_urok[id_user] = ""
+    tek_klass[id_user] = ""
+    ## нАДО СОЗДАТЬ СПИСОК КНОПОК С видео КЛАССА
+    await bot.send_message(id_user, ">>Выберите видео запись: ")
 
 @dp.message_handler()
 async def bot_message(message: types.Message):
