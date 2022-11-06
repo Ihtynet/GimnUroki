@@ -64,8 +64,8 @@ async def bot_message(message: types.Message):
             if len(user_dates) == 0:
                 await bot.send_message(id_user, "Ошибка регистрации. Введите пароль класса: ")
             else:
-                await bot.send_message(id_user, tx_user + ". Ваш класс: " + str(
-                    user_dates[0][0]) + "\n Нажмите (<Меню>) для выборка действий")
+                await bot.send_message(id_user, tx_user + ". Ваш класс: " + str(user_dates[0][0]) + "\n Нажмите (<Меню>) для выборка действий")
+                tek_commands[id_user] = ""
         else:
             await bot.send_message(id_user, "Не правильный пароль класса")
 
