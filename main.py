@@ -78,7 +78,7 @@ async def bot_message(message: types.Message):
 
     mes = message.text
     print(mes)
-
+    print(tek_commands[id_user])
     if mes[:3] == "ps#" and (tek_commands[id_user] == "start" or tek_commands[id_user] == "klass"):
         print("Задание класса: "+ mes)
         datacheck = bs.check_psw_klass(mes[3:])
@@ -97,11 +97,13 @@ async def bot_message(message: types.Message):
                 tek_urokiklassa[id_user] = bs.get_urokiklassa(tek_klass[id_user])
         else:
             await bot.send_message(id_user, "Не правильный пароль класса")
-    elif  tek_commands[id_user] == "urok":
+    elif tek_commands[id_user] == "urok":
         tek_commands[id_user] = ""
         tek_urok[id_user] = mes
 
         list_movies = bs.get_moviesuroka("math", tek_klass[id_user])
+        print(tek_klass[id_user])
+        print(list_movies)
         tek_mark = ReplyKeyboardMarkup(resize_keyboard=True);
         for mv in list_movies:
             tekbutton = KeyboardButton(mv)
