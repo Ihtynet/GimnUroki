@@ -9,7 +9,7 @@ def check_users(user_id):
         dbcon = sqlite3.connect('gimnuroki_data.db')
         con_cursor = dbcon.cursor()
 
-        text_q = "select klass, student from users where idtelegramm=?"
+        text_q = "select klass, name from users where idtelegramm=?"
         data_set = (user_id,)
         con_cursor.execute(text_q,data_set)
         records = con_cursor.fetchall()
@@ -50,21 +50,22 @@ def check_psw_klass(psw):
 
 #########################
 # Регистрация пользователя
-def registr_uses(user_id,klass,name,student):
+def registr_uses(user_id,klass,name,username):
     res = []
     try:
         dbcon = sqlite3.connect('gimnuroki_data.db')
         con_cursor = dbcon.cursor()
         now = datetime.now()
 
-        text_q = "select klass, student from users where idtelegramm=?"
+        text_q = "select klass, name from users where idtelegramm=?"
         data_set = (user_id,)
         con_cursor.execute(text_q,data_set)
         records = con_cursor.fetchall()
         if len(records) == 0:
-            data_set = (user_id, name, student, klass, now)
+            data_set = (user_id, name, username, klass, now)
+            print(">>>:", data_set)
             text_q = """INSERT INTO users
-                                  (idtelegramm, name, student, klass, joining_date)
+                                  (idtelegramm, name, username, klass, joining_date)
                                   VALUES (?, ?, ?, ?, ?);"""
         else:
             data_set = (klass, user_id)

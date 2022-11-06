@@ -19,10 +19,10 @@ try:
     text_q = """CREATE TABLE users ( 
              id INTEGER PRIMARY KEY,
              idtelegramm TEXT NOT NULL,  
-             name TEXT NOT NULL,  
-             student text NOT NULL,  
+             name TEXT,  
+             username text,  
              joining_date timestamp,  
-             klass INTEGER NOT NULL, 
+             klass INTEGER NOT NULL 
              );"""
     con_cursor.execute(text_q)
     dbcon.commit()
@@ -50,7 +50,7 @@ try:
     # Данные пользователей
     data_set = (12345678910, 'Alex', 'Иванов Иван', 1, now)
     text_q = """INSERT INTO users
-                          (idtelegramm, name, student, klass, joining_date)
+                          (idtelegramm, name, username, klass, joining_date)
                           VALUES (?, ?, ?, ?, ?);"""
     con_cursor.execute(text_q,data_set)
     dbcon.commit()
