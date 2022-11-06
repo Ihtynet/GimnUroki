@@ -1,16 +1,10 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 # стартовое Меню
-# Кнопки изменения громкости
-btnP = KeyboardButton('Выбрать ')
+btnP = KeyboardButton('Выбрать предмет')
 btnM = KeyboardButton("-")
-# Пауза
-btnPause = KeyboardButton("Пауза")
-# Кнопка перехода на другое меню
-btnChoice = KeyboardButton("Выбрать фильм")
-# Отоброжение кнопок основного меню
-mainMenu = ReplyKeyboardMarkup(resize_keyboard=True).add(btnM,btnP,btnPause,btnChoice)
+mainMenu = ReplyKeyboardMarkup(resize_keyboard=True).add(btnM, btnP, btnPause, btnChoice)
+
 # Меню выбора фильма
-# Можете добавить еще фильмы по количеству кнопок
 btn1 = KeyboardButton('1')
 btn2 = KeyboardButton('2')
 btn3 = KeyboardButton('3')
