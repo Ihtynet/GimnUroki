@@ -120,4 +120,4 @@ def get_moviesuroka(urok, klass):
 #registr_uses(123321, 5, "tx_user", "tx_username")
 
 #print(check_psw_klass("1234"))
-print(get_moviesuroka("math", 5))
+#print(get_moviesuroka("math", 5))
