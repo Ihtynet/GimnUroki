@@ -116,8 +116,8 @@ def get_moviesuroka(urok, klass):
     files = os.listdir(path_movies+str(klass)+"/"+str(urok))
     return files
 
+####################################
 #print(get_urokiklassa(5))
 #registr_uses(123321, 5, "tx_user", "tx_username")
-
 #print(check_psw_klass("1234"))
 #print(get_moviesuroka("math", 5))
